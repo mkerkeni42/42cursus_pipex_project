@@ -6,7 +6,7 @@
 /*   By: mkerkeni <mkerkeni@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 12:54:07 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/04/09 14:30:19 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/04/14 11:58:03 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <errno.h>
+#include <string.h>
 # include <fcntl.h>
 
 int	main(int ac, char **av);

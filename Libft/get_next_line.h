@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkerkeni <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mkerkeni <mkerkeni@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 09:32:58 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/02/23 14:13:44 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/04/12 09:43:12 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,8 @@
 # include "libft.h"
 
 char	*get_next_line(int fd);
-//size_t	ft_strlen(const char *s);
-//char	*ft_strchr(char *s, int c);
 char	*ft_strcpy(char *dest, char *src);
 char	*ft_strjoin_gnl(char *s1, char *s2, int x);
-//char	*ft_substr(char const *s, unsigned int start, size_t len);
 
 typedef struct s_lst
 {
