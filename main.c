@@ -6,7 +6,7 @@
 /*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 12:53:39 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/05/02 15:54:04 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/05/03 00:22:46 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,9 @@ int	ft_error(int x)
 	else if (x == 5)
 		perror("ERROR: failed to wait for the process to finish\n");
 	else if (x == 6)
-		perror("EERROR: failed to open the file\n");
+		perror("ERROR: failed to open the file\n");
+	else if (x == 7)
+		perror("ERROR: failed to close the file\n");
 	exit(EXIT_FAILURE);
 }
 
@@ -46,26 +48,26 @@ int	get_fd(char *path, int x)
 	return (fd);
 }
 
-char    **get_command_path(char **envp)
+static char    *get_command_path(char **envp)
 {
     char    **path_line;
     char    *path;
     int     i;
 
-    i = - 1;
+    i = -1;
     while (envp[++i])
     {
-        if (ft_strnstr(envp[i], "PATH", ft_strlen(envp[i])))
+        if (ft_strnstr(envp[i], "PATH=/usr", ft_strlen(envp[i])))
         {
             path_line = ft_split(envp[i], '=');
             break ;
         }
     }
-    path = path_line[0];
+    path = path_line[1];
     return (path);
 }
 
-void	create_processes(char **av, char *cmd_path, int infile_fd, int outfile_fd)
+void	create_processes(t_var var)
 {
 	int	pfd[2];
 	int	pid1;
@@ -77,16 +79,16 @@ void	create_processes(char **av, char *cmd_path, int infile_fd, int outfile_fd)
 	if (pid1 == -1)
 		ft_error(1);
 	if (pid1 == 0) // child process 1 (for cmd 1)
-		execute_first_command(pfd, av, cmd_path, infile_fd);
+		execute_first_command(var, pfd);
 	pid2 = fork();
 	if (pid2 == -1)
 		ft_error(1);
 	if (pid2 == 0) // child process 2 (for cmd 2)
-		execute_second_command(pfd, av, cmd_path, outfile_fd);
+		execute_second_command(var, pfd);
 	if (close(pfd[1]) == -1)
-			ft_error(3);
+		ft_error(3);
 	if (close(pfd[0]) == -1)
-			ft_error(3);
+		ft_error(3);
 	waitpid(pid1, NULL, 0);
 	waitpid(pid2, NULL, 0);
 }
@@ -95,13 +97,19 @@ int	main(int ac, char **av, char **envp)
 {
 	int		infile_fd;
 	int		outfile_fd;
-	char	*cmd_path;
+	char	*path;
+	t_var	var;
 	
 	if (ac != 5)
 		ft_error(0);
 	infile_fd = get_fd(av[1], 0);
 	outfile_fd = get_fd(av[4], 1);
-	cmd_path = get_command_path(envp);
-	create_processes(av, cmd_path, infile_fd, outfile_fd);
+	path = get_command_path(envp);
+	var.av = av;
+	var.envp = envp;
+	var.infile_fd = infile_fd;
+	var.outfile_fd = outfile_fd;
+	var.path = path;
+	create_processes(var);
 	return (0);
 }
