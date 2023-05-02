@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkerkeni <mkerkeni@student.42nice.fr>      +#+  +:+       +#+        */
+/*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 12:54:07 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/04/14 11:58:03 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/05/02 15:54:49 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,12 @@
 #include <string.h>
 # include <fcntl.h>
 
-int	main(int ac, char **av);
-int	get_file(char *path, int x);
+int	    main(int ac, char **av, char **envp);
+int	    get_fd(char *path, int x);
+int	    ft_error(int x);
+void    create_processes(char **av, char *cmd_path, int infile_fd, int outfile_fd);
 
-int	ft_error(int x);
+void    execute_first_command(int *pfd, char **av, char *cmd_path, int infile_fd);
+void    execute_second_command(int *pfd, char **av, char *cmd_path, int outfile_fd);
 
 #endif

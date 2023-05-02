@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mkerkeni <mkerkeni@student.42nice.fr>      +#+  +:+       +#+         #
+#    By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/03 12:55:09 by mkerkeni          #+#    #+#              #
-#    Updated: 2023/04/09 13:14:21 by mkerkeni         ###   ########.fr        #
+#    Updated: 2023/05/02 15:27:23 by mkerkeni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 #CFLAGS += -fsanitize=address -g3
 
-SRCS = 	main.c pipex_utils.c \
+SRCS = 	main.c pipex.c \
 
 #SRCS_BONUS = 	
 
