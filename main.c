@@ -6,7 +6,7 @@
 /*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 12:53:39 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/05/03 00:22:46 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/05/05 14:58:15 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,12 @@ int	ft_error(int x)
 		perror("ERROR: failed to open the file\n");
 	else if (x == 7)
 		perror("ERROR: failed to close the file\n");
+	else if (x == 8)
+		perror("ERROR: Failed to find the command path\n");
+	else if (x == 9)
+		perror("ERROR: Failed to get the commands");
+	else if (x == 10)
+		perror("ERROR: the execve function call failed");
 	exit(EXIT_FAILURE);
 }
 
@@ -50,7 +56,6 @@ int	get_fd(char *path, int x)
 
 static char    *get_command_path(char **envp)
 {
-    char    **path_line;
     char    *path;
     int     i;
 
@@ -59,11 +64,10 @@ static char    *get_command_path(char **envp)
     {
         if (ft_strnstr(envp[i], "PATH=/usr", ft_strlen(envp[i])))
         {
-            path_line = ft_split(envp[i], '=');
+            path = envp[i] + 5;
             break ;
         }
     }
-    path = path_line[1];
     return (path);
 }
 
@@ -78,12 +82,12 @@ void	create_processes(t_var var)
 	pid1 = fork();
 	if (pid1 == -1)
 		ft_error(1);
-	if (pid1 == 0) // child process 1 (for cmd 1)
+	if (pid1 == 0)
 		execute_first_command(var, pfd);
 	pid2 = fork();
 	if (pid2 == -1)
 		ft_error(1);
-	if (pid2 == 0) // child process 2 (for cmd 2)
+	if (pid2 == 0)
 		execute_second_command(var, pfd);
 	if (close(pfd[1]) == -1)
 		ft_error(3);
@@ -105,6 +109,12 @@ int	main(int ac, char **av, char **envp)
 	infile_fd = get_fd(av[1], 0);
 	outfile_fd = get_fd(av[4], 1);
 	path = get_command_path(envp);
+	if (!path)
+	{
+		close(infile_fd);
+		close(outfile_fd);
+		ft_error(8);
+	}
 	var.av = av;
 	var.envp = envp;
 	var.infile_fd = infile_fd;

@@ -6,7 +6,7 @@
 /*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 12:54:07 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/05/02 23:29:32 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/05/05 11:48:53 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,5 +37,6 @@ int	    ft_error(int x);
 void    create_processes(t_var var);
 void    execute_first_command(t_var var, int *pfd);
 void    execute_second_command(t_var var, int *pfd);
+void    free_str(char **str);
 
 #endif
