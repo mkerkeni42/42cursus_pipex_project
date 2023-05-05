@@ -6,13 +6,13 @@
 /*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 15:35:55 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/05/05 14:49:49 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/05/05 15:29:02 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	free_str(char **str)
+static void	free_str(char **str)
 {
 	int	i;
 	
@@ -58,59 +58,56 @@ static char	*get_cmd_path(t_var var, char **cmds)
 	return (NULL);
 }
 
-void	execute_first_command(t_var var, int *pfd)
+void	exec_first_cmd(t_var var, int *pfd)
 {
 	char	**cmds1;
 	char	*cmd_path;
 	
-	dup2(var.infile_fd, STDIN_FILENO);
-	if (close(var.infile_fd) == -1)
-	{
-		close(var.outfile_fd);
-		ft_error(7);
-	}
+	dup2(var.in_fd, STDIN_FILENO);
+	if (close(var.in_fd) == -1)
+		ft_error(4, var.in_fd, var.out_fd);
 	if (close(pfd[0]) == -1)
-		ft_error(3);
+		ft_error(2, var.in_fd, var.out_fd);
 	dup2(pfd[1], STDOUT_FILENO);
 	if (close(pfd[1]) == -1)
-		ft_error(3);
+		ft_error(2, var.in_fd, var.out_fd);
 	cmds1 = get_commands(var, 0);
 	if (!cmds1)
-		ft_error(9);
+		ft_error(6, var.in_fd, var.out_fd);
 	cmd_path = get_cmd_path(var, cmds1);
 	if (!cmd_path)
 	{
 		free_str(cmds1);
-		ft_error(8);
+		ft_error(5, var.in_fd, var.out_fd);
 	}
 	cmds1[0] = cmd_path;
-	if (execve(cmds1[0], cmds1, var.envp) == -1)
-		ft_error(10);
+	if (execve(cmds1[0], cmds1, var.env) == -1)
+		ft_error(7, var.in_fd, var.out_fd);
 }
 
-void	execute_second_command(t_var var, int *pfd)
+void	exec_second_cmd(t_var var, int *pfd)
 {
 	char	**cmds2;
 	char	*cmd_path;
 	
-	dup2(var.outfile_fd, STDOUT_FILENO);
-	if (close(var.outfile_fd) == -1)
-		ft_error(7);
+	dup2(var.out_fd, STDOUT_FILENO);
+	if (close(var.out_fd) == -1)
+		ft_error(4, var.in_fd, var.out_fd);
 	if (close(pfd[1]) == -1)
-		ft_error(3);
+		ft_error(2, var.in_fd, var.out_fd);
 	dup2(pfd[0], STDIN_FILENO);
 	if (close(pfd[0]) == -1)
-		ft_error(3);
+		ft_error(2, var.in_fd, var.out_fd);
 	cmds2 = get_commands(var, 1);
 	if (!cmds2)
-		ft_error(9);
+		ft_error(6, var.in_fd, var.out_fd);
 	cmd_path = get_cmd_path(var, cmds2);
 	if (!cmd_path)
 	{
 		free_str(cmds2);
-		ft_error(8);
+		ft_error(5, var.in_fd, var.out_fd);
 	}
 	cmds2[0] = cmd_path;
-	if (execve(cmds2[0], cmds2, var.envp) == -1)
-		ft_error(10);
+	if (execve(cmds2[0], cmds2, var.env) == -1)
+		ft_error(7, var.in_fd, var.out_fd);
 }
