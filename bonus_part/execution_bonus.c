@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex_bonus.c                                      :+:      :+:    :+:   */
+/*   execution_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 15:35:55 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/05/11 12:03:00 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/05/11 16:04:14 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,6 @@ static void	free_str(char **str)
 	i = -1;
 	while (str[++i])
 		free(str[i]);
-}
-
-static char	**get_commands(t_var var, int x)
-{
-	char	**cmds;
-	
-	if (x == 0)
-		cmds = ft_split(var.av[2], ' ');
-	else
-		cmds = ft_split(var.av[3], ' ');
-	return (cmds);
 }
 
 static char	*get_cmd_path(t_var var, char **cmds)
@@ -58,12 +47,12 @@ static char	*get_cmd_path(t_var var, char **cmds)
 	return (NULL);
 }
 
-void	exec_cmd(t_var var)
+void	exec_cmd(t_var var, int arg)
 {
 	char	**cmds;
 	char	*cmd_path;
 	
-	cmds = get_commands(var, 0);
+	cmds = ft_split(var.av[arg], ' ');
 	if (!cmds)
 		ft_error(6, var.in_fd, var.out_fd);
 	cmd_path = get_cmd_path(var, cmds);

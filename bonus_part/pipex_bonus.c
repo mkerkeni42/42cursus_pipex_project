@@ -6,7 +6,7 @@
 /*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 12:53:39 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/05/11 12:51:42 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/05/11 15:54:36 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,25 @@ int	ft_error(int x, int in_fd, int out_fd)
 	exit(EXIT_FAILURE);
 }
 
-void	close_unused_pipes(int **pfd, int x, int y, int z)
+void	close_pipes(t_var var, int **pfd, int i, int x)
 {
-	if (x == 1)
+	if (x == 0)
 	{
-		close
+		if (close(pfd[i][0] == -1))
+			ft_error(2, var.in_fd, var.out_fd);
+		if (close(pfd[i][1] == -1))
+			ft_error(2, var.in_fd, var.out_fd);
 	}
+	else if (x == 1)
+	{
+		if (close(pfd[i][0] == -1))
+			ft_error(2, var.in_fd, var.out_fd);
+	}
+	else if (x == 2)
+	{
+		if (close(pfd[i][1] == -1))
+			ft_error(2, var.in_fd, var.out_fd);
+	}	
 }
 
 static int	get_fd(char *path, int x)
@@ -82,7 +95,6 @@ int	main(int ac, char **av, char **env)
 	int		in_fd;
 	int		out_fd;
 	char	*path;
-	int		pipe_nb;
 	t_var	var;
 	
 	if (ac < 5)
@@ -91,16 +103,17 @@ int	main(int ac, char **av, char **env)
 		exit(EXIT_FAILURE);
 	}
 	in_fd = get_fd(av[1], 0);
-	out_fd = get_fd(av[4], 1);
+	out_fd = get_fd(av[ac - 1], 1);
 	path = get_command_path(env);
 	if (!path)
 		ft_error(5, in_fd, out_fd);
 	var.av = av;
+	var.ac = ac;
 	var.env = env;
 	var.in_fd = in_fd;
 	var.out_fd = out_fd;
 	var.path = path;
-	pipe_nb = ac - 4;
-	create_processes(var, pipe_nb);
+	var.pipe_nb = ac - 4;
+	create_processes(var);
 	return (0);
 }

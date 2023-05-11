@@ -6,7 +6,7 @@
 /*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 12:54:07 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/05/11 12:51:11 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/05/11 15:56:08 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,18 +25,20 @@
 
 typedef struct s_var {
     char    **av;
+    int     ac;
     char    **env;
     int     in_fd;
     int     out_fd;
     char    *path;
+    int     pipe_nb;
 }           t_var;
 
 int	    main(int ac, char **av, char **env);
 int	    ft_error(int x, int in_fd, int out_fd);
-void	close_unused_pipes(int **pfd, int x, int y, int z);
+void	close_pipes(t_var var, int **pfd, int i, int x);
 
-void    create_processes(t_var var, int pipe_fd);
+void    create_processes(t_var var);
 
-void    exec_cmd(t_var var, int *pfd);
+void    exec_cmd(t_var var, int arg);
 
 #endif
