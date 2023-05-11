@@ -6,7 +6,7 @@
 #    By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/03 12:55:09 by mkerkeni          #+#    #+#              #
-#    Updated: 2023/05/05 15:25:46 by mkerkeni         ###   ########.fr        #
+#    Updated: 2023/05/11 12:32:51 by mkerkeni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,11 +16,22 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 CFLAGS += -fsanitize=address -g3
 
-SRCS = 	main.c pipex.c \
+SRCS =  mand_part/main.c \
+		mand_part/pipex.c \
 
-#SRCS_BONUS = 	
+SRCS_BONUS = bonus_part/pipex_bonus.c \
+			 bonus_part/process_bonus.c \
+			 bonus_part/execution_bonus.c \
 
-OBJS = $(SRCS:.c=.o)
+OBJS_MAND = $(SRCS:.c=.o)
+
+OBJS_BONUS = $(SRCS_BONUS:.c=.o)
+
+ifndef BONUS
+OBJS = $(OBJS_MAND)
+else
+OBJS = $(OBJS_BONUS)
+endif
 
 %.o:%.c
 	@$(CC) $(CFLAGS) -c $< -o $(<:.c=.o)
@@ -33,8 +44,11 @@ $(NAME): $(OBJS)
 	@$(CC) $(CFLAGS) -o $(NAME) $^ $(LIBFT)libft.a
 	@echo "	Compiled !"
 
+bonus:
+	@$(MAKE) BONUS=1
+	
 clean:
-	@rm -f $(OBJS)
+	@rm -f $(OBJS) $(OBJS_BONUS)
 	@$(MAKE) clean -C $(LIBFT)
 
 fclean: clean
