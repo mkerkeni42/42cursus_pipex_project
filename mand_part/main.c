@@ -6,7 +6,7 @@
 /*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 12:53:39 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/05/11 15:46:48 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/05/12 22:57:45 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static int	get_fd(char *path, int x)
 	return (fd);
 }
 
-static char    *get_command_path(char **env)
+static char    *get_path(char **env)
 {
     char    *path;
     int     i;
@@ -110,7 +110,7 @@ int	main(int ac, char **av, char **env)
 	}
 	in_fd = get_fd(av[1], 0);
 	out_fd = get_fd(av[4], 1);
-	path = get_command_path(env);
+	path = get_path(env);
 	if (!path)
 		ft_error(5, in_fd, out_fd);
 	var.av = av;

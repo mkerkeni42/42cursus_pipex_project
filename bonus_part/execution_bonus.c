@@ -6,7 +6,7 @@
 /*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 15:35:55 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/05/12 15:18:46 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/05/12 22:57:45 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,23 @@ static void	free_str(char **str)
 	i = -1;
 	while (str[++i])
 		free(str[i]);
+}
+
+char    *get_path(char **env)
+{
+    char    *path;
+    int     i;
+
+    i = -1;
+    while (env[++i])
+    {
+        if (ft_strnstr(env[i], "PATH=/usr", ft_strlen(env[i])))
+        {
+            path = env[i] + 5;
+            break ;
+        }
+    }
+    return (path);
 }
 
 static char	*get_cmd_path(t_var var, char **cmds)

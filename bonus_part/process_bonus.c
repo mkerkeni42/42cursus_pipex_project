@@ -6,7 +6,7 @@
 /*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 12:07:22 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/05/12 16:06:17 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/05/12 23:22:25 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,8 @@ static int	create_last_process(t_var var, int **pfd)
 		if (close(pfd[var.pipe_nb - 1][1]) == -1)
 			ft_error(2, var.in_fd, var.out_fd);
 		while (++i < var.pipe_nb - 1)
-		{
-			if (close(pfd[i][1]) == -1)
+			if (close(pfd[i][1]) == -1 || close(pfd[i][0]) == -1)
 				ft_error(2, var.in_fd, var.out_fd);
-			if (close(pfd[i][0]) == -1)
-				ft_error(2, var.in_fd, var.out_fd);
-		}
 		dup2(pfd[var.pipe_nb - 1][0], STDIN_FILENO);
 		if (close(pfd[var.pipe_nb - 1][0]) == -1)
 			ft_error(2, var.in_fd, var.out_fd);
@@ -91,6 +87,7 @@ static int	*create_mid_processes(t_var var, int **pfd)
 			dup2(pfd[i][0], STDIN_FILENO);
 			if (close(pfd[i][0]) == -1)
 				ft_error(2, var.in_fd, var.out_fd);
+			ft_printf("passed here\n");
 			dup2(pfd[i + 1][1], STDOUT_FILENO);
 			if (close(pfd[i + 1][1]) == -1)
 				ft_error(2, var.in_fd, var.out_fd);
@@ -118,12 +115,8 @@ static int	create_first_process(t_var var, int **pfd)
 			ft_error(2, var.in_fd, var.out_fd);
 		i = 0;
 		while (++i < var.pipe_nb)
-		{
-			if (close(pfd[i][0]) == -1)
+			if (close(pfd[i][0]) == -1 || close(pfd[i][1]) == -1)
 				ft_error(2, var.in_fd, var.out_fd);
-			if (close(pfd[i][1]) == -1)
-				ft_error(2, var.in_fd, var.out_fd);
-		}
 		dup2(pfd[0][1], STDOUT_FILENO);
 		if (close(pfd[0][1]) == -1)
 			ft_error(2, var.in_fd, var.out_fd);
@@ -131,27 +124,7 @@ static int	create_first_process(t_var var, int **pfd)
 	}
 	return (pid);
 }
-/*static int	**get_pfd(t_var var)
-{
-	int	**pfd;
-	int		i;
 
-	i = -1;
-	pfd = malloc(sizeof(int *) * (var.pipe_nb));
-	if (!pfd)
-		ft_error(8, var.in_fd, var.out_fd);
-	while (++i < var.pipe_nb)
-		pfd[i] = malloc(sizeof(int) * 2);
-	if (!pfd)
-		ft_error(8, var.in_fd, var.out_fd);
-	i = -1;
-	while (++i < var.pipe_nb)
-	{
-		if (pipe(pfd[i]) == -1)
-			ft_error(1, var.in_fd, var.out_fd);
-	}
-	return (pfd);
-}*/
 void	create_processes(t_var var)
 {
 	int	**pfd;
@@ -160,21 +133,7 @@ void	create_processes(t_var var)
 	int	*mid_pids;
 	int	i;
 	
-	
-	i = -1;
-	pfd = malloc(sizeof(int *) * (var.pipe_nb));
-	if (!pfd)
-		ft_error(8, var.in_fd, var.out_fd);
-	while (++i < var.pipe_nb)
-		pfd[i] = malloc(sizeof(int) * 2);
-	if (!pfd)
-		ft_error(8, var.in_fd, var.out_fd);
-	i = -1;
-	while (++i < var.pipe_nb)
-	{
-		if (pipe(pfd[i]) == -1)
-			ft_error(1, var.in_fd, var.out_fd);
-	}
+	pfd = get_pfd(var);
 	first_pid = create_first_process(var, pfd);
 	if (var.pipe_nb > 1)
 		mid_pids = create_mid_processes(var, pfd);
