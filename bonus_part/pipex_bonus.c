@@ -6,7 +6,7 @@
 /*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 12:53:39 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/05/11 15:54:36 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/05/12 15:44:15 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,25 +37,23 @@ int	ft_error(int x, int in_fd, int out_fd)
 	exit(EXIT_FAILURE);
 }
 
-void	close_pipes(t_var var, int **pfd, int i, int x)
+void	close_pipes(t_var var, int **pfd, int i)
 {
-	if (x == 0)
+	int	j;
+
+	j = -1;
+	while(++j < var.pipe_nb)
 	{
-		if (close(pfd[i][0] == -1))
-			ft_error(2, var.in_fd, var.out_fd);
-		if (close(pfd[i][1] == -1))
-			ft_error(2, var.in_fd, var.out_fd);
+		if (j == i || j == i + 1)
+			break ;
+		else
+		{
+			if (close(pfd[j][0] == -1))
+				ft_error(2, var.in_fd, var.out_fd);
+			if (close(pfd[j][1] == -1))
+				ft_error(2, var.in_fd, var.out_fd);	
+		}
 	}
-	else if (x == 1)
-	{
-		if (close(pfd[i][0] == -1))
-			ft_error(2, var.in_fd, var.out_fd);
-	}
-	else if (x == 2)
-	{
-		if (close(pfd[i][1] == -1))
-			ft_error(2, var.in_fd, var.out_fd);
-	}	
 }
 
 static int	get_fd(char *path, int x)
