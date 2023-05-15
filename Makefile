@@ -6,7 +6,7 @@
 #    By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/03 12:55:09 by mkerkeni          #+#    #+#              #
-#    Updated: 2023/05/11 15:40:53 by mkerkeni         ###   ########.fr        #
+#    Updated: 2023/05/15 11:45:01 by mkerkeni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = pipex
 LIBFT = Libft/
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
-#CFLAGS += -fsanitize=address -g3
+CFLAGS += -fsanitize=address -g3
 
 SRCS =  mand_part/main.c \
 		mand_part/pipex.c \

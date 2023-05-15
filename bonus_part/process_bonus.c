@@ -6,7 +6,7 @@
 /*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 12:07:22 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/05/12 23:22:25 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/05/15 12:31:00 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,10 @@ static int	create_last_process(t_var var, int **pfd)
 	return (pid);
 }
 
-static int	*create_mid_processes(t_var var, int **pfd)
+static int	*create_mid_processes(t_var var, int **pfd, int *pids)
 {
-	int	*pids;
 	int	i;
 	
-	pids = malloc(sizeof(int) * (var.pipe_nb - 1));
 	i = -1;
 	while (++i < var.pipe_nb - 1)
 	{
@@ -87,7 +85,6 @@ static int	*create_mid_processes(t_var var, int **pfd)
 			dup2(pfd[i][0], STDIN_FILENO);
 			if (close(pfd[i][0]) == -1)
 				ft_error(2, var.in_fd, var.out_fd);
-			ft_printf("passed here\n");
 			dup2(pfd[i + 1][1], STDOUT_FILENO);
 			if (close(pfd[i + 1][1]) == -1)
 				ft_error(2, var.in_fd, var.out_fd);
@@ -131,23 +128,21 @@ void	create_processes(t_var var)
 	int	first_pid;
 	int	last_pid;
 	int	*mid_pids;
-	int	i;
 	
+	mid_pids = malloc(sizeof(int) * (var.pipe_nb - 1));
 	pfd = get_pfd(var);
-	first_pid = create_first_process(var, pfd);
+//	if (ft_strncmp(var.av[1], "here_doc", 9))
+//		first_pid = create_process_here_doc(var, pfd);
+//	else
+		first_pid = create_first_process(var, pfd);
 	if (var.pipe_nb > 1)
-		mid_pids = create_mid_processes(var, pfd);
+		mid_pids = create_mid_processes(var, pfd, mid_pids);
 	last_pid = create_last_process(var, pfd);
-	i = -1;
-	while (++i < var.pipe_nb)
-	{
-		if (close(pfd[i][0]) == -1)
-			ft_error(2, var.in_fd, var.out_fd);
-		if (close(pfd[i][1]) == -1)
-			ft_error(2, var.in_fd, var.out_fd);
-	}
+	close_pipes(var, pfd, -2);
 	wait_for_processes(var, first_pid, last_pid, mid_pids, 0);
 	if (var.pipe_nb > 1)
 		wait_for_processes(var, first_pid, last_pid, mid_pids, 1);
 	wait_for_processes(var, first_pid, last_pid, mid_pids, 2);
+	free_array(pfd, var.pipe_nb);
+	free(mid_pids);
 }

@@ -6,7 +6,7 @@
 /*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 12:53:39 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/05/12 22:57:45 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/05/15 11:07:43 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static int	get_fd(char *path, int x)
 	if (x == 0)
 		fd = open(path, O_RDONLY, 0777);
 	else
-		fd = open(path, O_WRONLY, 0777);
+		fd = open(path, O_CREAT | O_TRUNC | O_WRONLY, 0777);
 	if (fd == -1)
 	{
 		perror("ERROR: failed to open the file\n");

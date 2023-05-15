@@ -6,19 +6,30 @@
 /*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 15:35:55 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/05/12 22:57:45 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/05/15 12:04:55 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-static void	free_str(char **str)
+void	free_str(char **str)
 {
 	int	i;
 	
 	i = -1;
 	while (str[++i])
 		free(str[i]);
+	free(str);
+}
+
+void	free_array(int **array, int size)
+{
+	int i;
+
+	i = -1;
+	while (++i < size)
+		free(array[i]);
+	free(array);
 }
 
 char    *get_path(char **env)

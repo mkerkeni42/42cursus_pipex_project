@@ -6,7 +6,7 @@
 /*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 12:53:39 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/05/12 23:19:00 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/05/15 12:03:01 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,11 @@ void	close_pipes(t_var var, int **pfd, int i)
 	j = -1;
 	while (++j < var.pipe_nb)
 	{
-		if (j == i || j == i + 1)
-			return ;
-		else
+		if (j != i && j != i + 1)
 		{
-			if (close(pfd[j][0] == -1))
+			if (close(pfd[j][0]) == -1)
 				ft_error(2, var.in_fd, var.out_fd);
-			if (close(pfd[j][1] == -1))
+			if (close(pfd[j][1]) == -1)
 				ft_error(2, var.in_fd, var.out_fd);	
 		}
 	}
@@ -71,10 +69,8 @@ int	**get_pfd(t_var var)
 		ft_error(8, var.in_fd, var.out_fd);
 	i = -1;
 	while (++i < var.pipe_nb)
-	{
 		if (pipe(pfd[i]) == -1)
 			ft_error(1, var.in_fd, var.out_fd);
-	}
 	return (pfd);
 }
 
@@ -85,7 +81,7 @@ static int	get_fd(char *path, int x)
 	if (x == 0)
 		fd = open(path, O_RDONLY, 0777);
 	else
-		fd = open(path, O_WRONLY, 0777);
+		fd = open(path, O_CREAT | O_WRONLY | O_TRUNC, 0777);
 	if (fd == -1)
 	{
 		exit(EXIT_FAILURE);

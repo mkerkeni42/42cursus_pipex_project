@@ -6,7 +6,7 @@
 /*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 12:54:07 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/05/12 22:59:23 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/05/15 11:33:47 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ int	    **get_pfd(t_var var);
 void    create_processes(t_var var);
 
 char    *get_path(char **env);
+void	free_str(char **str);
+void    free_array(int **array, int size);
 void    exec_cmd(t_var var, int arg);
 
 #endif
