@@ -6,7 +6,7 @@
 #    By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/03 12:55:09 by mkerkeni          #+#    #+#              #
-#    Updated: 2023/05/15 11:45:01 by mkerkeni         ###   ########.fr        #
+#    Updated: 2023/05/15 18:39:36 by mkerkeni         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,7 @@ SRCS =  mand_part/main.c \
 SRCS_BONUS = bonus_part/pipex_bonus.c \
 			 bonus_part/process_bonus.c \
 			 bonus_part/execution_bonus.c \
+			 bonus_part/handle_here_doc.c \
 
 OBJS_MAND = $(SRCS:.c=.o)
 

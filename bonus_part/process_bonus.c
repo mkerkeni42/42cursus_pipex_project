@@ -6,7 +6,7 @@
 /*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 12:07:22 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/05/15 12:31:00 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/05/15 15:02:20 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,9 +131,9 @@ void	create_processes(t_var var)
 	
 	mid_pids = malloc(sizeof(int) * (var.pipe_nb - 1));
 	pfd = get_pfd(var);
-//	if (ft_strncmp(var.av[1], "here_doc", 9))
-//		first_pid = create_process_here_doc(var, pfd);
-//	else
+	if (!var.in_fd)
+		first_pid = create_process_here_doc(var, pfd);
+	else
 		first_pid = create_first_process(var, pfd);
 	if (var.pipe_nb > 1)
 		mid_pids = create_mid_processes(var, pfd, mid_pids);

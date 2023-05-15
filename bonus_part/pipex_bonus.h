@@ -6,7 +6,7 @@
 /*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 12:54:07 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/05/15 11:33:47 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/05/15 15:02:13 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,9 @@ void	close_pipes(t_var var, int **pfd, int i);
 int	    **get_pfd(t_var var);
 
 void    create_processes(t_var var);
+
+
+int     create_process_here_doc(t_var var, int **pfd);
 
 char    *get_path(char **env);
 void	free_str(char **str);

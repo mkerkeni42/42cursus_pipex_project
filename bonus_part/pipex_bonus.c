@@ -6,7 +6,7 @@
 /*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 12:53:39 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/05/15 12:03:01 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/05/15 15:17:18 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ int	ft_error(int x, int in_fd, int out_fd)
 		perror("ERROR: the execve function call failed");
 	else if (x == 8)
 		perror("ERROR: failed to open the file\n");
-	close(in_fd);
+	if (x <= 8)
+		close(in_fd);
 	close(out_fd);
 	exit(EXIT_FAILURE);
 }
@@ -101,7 +102,18 @@ int	main(int ac, char **av, char **env)
 		perror("ERROR: Wrong number of arguments !\n");
 		exit(EXIT_FAILURE);
 	}
-	in_fd = get_fd(av[1], 0);
+	if (!ft_strncmp(av[1], "here_doc", ft_strlen(av[1])))
+	{
+		ft_printf("passed here\n");
+		if (ac < 6)
+		{
+			perror("ERROR: Wrong number of arguments !\n");
+			exit(EXIT_FAILURE);
+		}
+		in_fd = 0;
+	}
+	else
+		in_fd = get_fd(av[1], 0);
 	out_fd = get_fd(av[ac - 1], 1);
 	path = get_path(env);
 	if (!path)
