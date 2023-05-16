@@ -6,7 +6,7 @@
 /*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 12:54:07 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/05/15 15:02:13 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/05/16 11:49:30 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,28 +24,27 @@
 # include <fcntl.h>
 
 typedef struct s_var {
-    char    **av;
-    int     ac;
-    char    **env;
-    int     in_fd;
-    int     out_fd;
-    char    *path;
-    int     pipe_nb;
-}           t_var;
+	char	**av;
+	int		ac;
+	char	**env;
+	int		in_fd;
+	int		out_fd;
+	char	*path;
+	int		pipe_nb;
+}			t_var;
 
-int	    main(int ac, char **av, char **env);
-int	    ft_error(int x, int in_fd, int out_fd);
+int		main(int ac, char **av, char **env);
+int		ft_error(int x, int in_fd, int out_fd);
 void	close_pipes(t_var var, int **pfd, int i);
-int	    **get_pfd(t_var var);
 
-void    create_processes(t_var var);
+void   	create_processes(t_var var);
 
+int		create_process_infile(t_var var, int **pfd);
+int		create_process_here_doc(t_var var, int **pfd);
 
-int     create_process_here_doc(t_var var, int **pfd);
-
-char    *get_path(char **env);
+char	*get_path(char **env);
 void	free_str(char **str);
-void    free_array(int **array, int size);
-void    exec_cmd(t_var var, int arg);
+void	free_array(int **array, int size);
+void	exec_cmd(t_var var, int arg);
 
 #endif

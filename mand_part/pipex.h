@@ -6,7 +6,7 @@
 /*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 12:54:07 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/05/09 13:11:44 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/05/16 09:21:54 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,17 @@
 # include <fcntl.h>
 
 typedef struct s_var {
-    char    **av;
-    char    **env;
-    int     in_fd;
-    int     out_fd;
-    char    *path;
-}           t_var;
+	char	**av;
+	char	**env;
+	int		in_fd;
+	int		out_fd;
+	char	*path;
+}			t_var;
 
-int	    main(int ac, char **av, char **env);
-int	    ft_error(int x, int in_fd, int out_fd);
+int		main(int ac, char **av, char **env);
+int		ft_error(int x, int in_fd, int out_fd);
 
-void    exec_first_cmd(t_var var, int *pfd);
-void    exec_second_cmd(t_var var, int *pfd);
+void	exec_first_cmd(t_var var, int *pfd);
+void	exec_second_cmd(t_var var, int *pfd);
 
 #endif

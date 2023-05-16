@@ -6,7 +6,7 @@
 /*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 12:07:22 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/05/15 15:02:20 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/05/16 11:49:24 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,32 +94,24 @@ static int	*create_mid_processes(t_var var, int **pfd, int *pids)
 	return (pids);
 }
 
-static int	create_first_process(t_var var, int **pfd)
+static int	**get_pfd(t_var var)
 {
-	int	pid;
-	int	i;
+	int		**pfd;
+	int		i;
 
 	i = -1;
-	pid = fork();
-	if (pid == -1)
-		ft_error(0, var.in_fd, var.out_fd);
-	if (pid == 0)
-	{
-		dup2(var.in_fd, STDIN_FILENO);
-		if (close(var.in_fd) == -1)
-			ft_error(4, var.in_fd, var.out_fd);
-		if (close(pfd[0][0]) == -1)
-			ft_error(2, var.in_fd, var.out_fd);
-		i = 0;
-		while (++i < var.pipe_nb)
-			if (close(pfd[i][0]) == -1 || close(pfd[i][1]) == -1)
-				ft_error(2, var.in_fd, var.out_fd);
-		dup2(pfd[0][1], STDOUT_FILENO);
-		if (close(pfd[0][1]) == -1)
-			ft_error(2, var.in_fd, var.out_fd);
-		exec_cmd(var, 2);
-	}
-	return (pid);
+	pfd = malloc(sizeof(int *) * (var.pipe_nb));
+	if (!pfd)
+		ft_error(8, var.in_fd, var.out_fd);
+	while (++i < var.pipe_nb)
+		pfd[i] = malloc(sizeof(int) * 2);
+	if (!pfd)
+		ft_error(8, var.in_fd, var.out_fd);
+	i = -1;
+	while (++i < var.pipe_nb)
+		if (pipe(pfd[i]) == -1)
+			ft_error(1, var.in_fd, var.out_fd);
+	return (pfd);
 }
 
 void	create_processes(t_var var)
@@ -134,7 +126,7 @@ void	create_processes(t_var var)
 	if (!var.in_fd)
 		first_pid = create_process_here_doc(var, pfd);
 	else
-		first_pid = create_first_process(var, pfd);
+		first_pid = create_process_infile(var, pfd);
 	if (var.pipe_nb > 1)
 		mid_pids = create_mid_processes(var, pfd, mid_pids);
 	last_pid = create_last_process(var, pfd);

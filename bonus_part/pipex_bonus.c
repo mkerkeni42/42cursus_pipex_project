@@ -6,7 +6,7 @@
 /*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 12:53:39 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/05/15 15:17:18 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/05/16 11:49:06 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,12 @@ int	ft_error(int x, int in_fd, int out_fd)
 	else if (x == 6)
 		perror("ERROR: Failed to get the commands");
 	else if (x == 7)
-		perror("ERROR: the execve function call failed");
+		perror("ERROR: The execve function call failed");
 	else if (x == 8)
-		perror("ERROR: failed to open the file\n");
-	if (x <= 8)
-		close(in_fd);
+		perror("ERROR: Failed to allocate memory for the pipes\n");
+	else if (x == 9)
+		perror("ERROR: Failed to write into the pipe\n");
+	close(in_fd);
 	close(out_fd);
 	exit(EXIT_FAILURE);
 }
@@ -55,26 +56,6 @@ void	close_pipes(t_var var, int **pfd, int i)
 	}
 }
 
-int	**get_pfd(t_var var)
-{
-	int	**pfd;
-	int		i;
-
-	i = -1;
-	pfd = malloc(sizeof(int *) * (var.pipe_nb));
-	if (!pfd)
-		ft_error(8, var.in_fd, var.out_fd);
-	while (++i < var.pipe_nb)
-		pfd[i] = malloc(sizeof(int) * 2);
-	if (!pfd)
-		ft_error(8, var.in_fd, var.out_fd);
-	i = -1;
-	while (++i < var.pipe_nb)
-		if (pipe(pfd[i]) == -1)
-			ft_error(1, var.in_fd, var.out_fd);
-	return (pfd);
-}
-
 static int	get_fd(char *path, int x)
 {
 	int	fd;
@@ -85,9 +66,31 @@ static int	get_fd(char *path, int x)
 		fd = open(path, O_CREAT | O_WRONLY | O_TRUNC, 0777);
 	if (fd == -1)
 	{
+		perror("ERROR: failed to open the file\n");
 		exit(EXIT_FAILURE);
 	}
 	return (fd);
+}
+
+static int	check_args(t_var var, int in_fd)
+{
+	if (var.ac < 5)
+	{
+		perror("ERROR: Wrong number of arguments !\n");
+		exit(EXIT_FAILURE);
+	}
+	if (!ft_strncmp(var.av[1], "here_doc", ft_strlen(var.av[1])))
+	{
+		if (var.ac < 6)
+		{
+			perror("ERROR: Wrong number of arguments !\n");
+			exit(EXIT_FAILURE);
+		}
+		var.pipe_nb = -1;
+	}
+	else
+		in_fd = get_fd(var.av[1], 0);
+	return (in_fd);
 }
 
 int	main(int ac, char **av, char **env)
@@ -97,34 +100,20 @@ int	main(int ac, char **av, char **env)
 	char	*path;
 	t_var	var;
 	
-	if (ac < 5)
-	{
-		perror("ERROR: Wrong number of arguments !\n");
-		exit(EXIT_FAILURE);
-	}
-	if (!ft_strncmp(av[1], "here_doc", ft_strlen(av[1])))
-	{
-		ft_printf("passed here\n");
-		if (ac < 6)
-		{
-			perror("ERROR: Wrong number of arguments !\n");
-			exit(EXIT_FAILURE);
-		}
-		in_fd = 0;
-	}
-	else
-		in_fd = get_fd(av[1], 0);
+	in_fd = 0;
+	var.pipe_nb = 0;
+	var.av = av;
+	var.ac = ac;
+	in_fd = check_args(var, in_fd);
 	out_fd = get_fd(av[ac - 1], 1);
 	path = get_path(env);
 	if (!path)
 		ft_error(5, in_fd, out_fd);
-	var.av = av;
-	var.ac = ac;
 	var.env = env;
 	var.in_fd = in_fd;
 	var.out_fd = out_fd;
 	var.path = path;
-	var.pipe_nb = ac - 4;
+	var.pipe_nb += ac - 4;
 	create_processes(var);
-	return (0);
+	return (EXIT_SUCCESS);
 }
