@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mkerkeni <mkerkeni@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 12:53:39 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/05/16 11:49:06 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/05/18 09:56:44 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	close_pipes(t_var var, int **pfd, int i)
 			if (close(pfd[j][0]) == -1)
 				ft_error(2, var.in_fd, var.out_fd);
 			if (close(pfd[j][1]) == -1)
-				ft_error(2, var.in_fd, var.out_fd);	
+				ft_error(2, var.in_fd, var.out_fd);
 		}
 	}
 }
@@ -99,7 +99,7 @@ int	main(int ac, char **av, char **env)
 	int		out_fd;
 	char	*path;
 	t_var	var;
-	
+
 	in_fd = 0;
 	var.pipe_nb = 0;
 	var.av = av;

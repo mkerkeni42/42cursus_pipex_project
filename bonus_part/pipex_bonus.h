@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mkerkeni <mkerkeni@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 12:54:07 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/05/16 11:49:30 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/05/18 09:38:07 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,16 @@ typedef struct s_var {
 	int		out_fd;
 	char	*path;
 	int		pipe_nb;
+	int		first_pid;
+	int		*mid_pids;
+	int		last_pid;
 }			t_var;
 
 int		main(int ac, char **av, char **env);
 int		ft_error(int x, int in_fd, int out_fd);
 void	close_pipes(t_var var, int **pfd, int i);
 
-void   	create_processes(t_var var);
+void	create_processes(t_var var);
 
 int		create_process_infile(t_var var, int **pfd);
 int		create_process_here_doc(t_var var, int **pfd);

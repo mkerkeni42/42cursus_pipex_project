@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mkerkeni <mkerkeni@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 12:53:39 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/05/16 09:22:14 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/05/18 09:46:24 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,21 +51,22 @@ static int	get_fd(char *path, int x)
 	return (fd);
 }
 
-static char    *get_path(char **env)
+static char	*get_path(char **env)
 {
-    char    *path;
-    int     i;
+	char	*path;
+	int		i;
 
-    i = -1;
-    while (env[++i])
-    {
-        if (ft_strnstr(env[i], "PATH=/usr", ft_strlen(env[i])))
-        {
-            path = env[i] + 5;
-            break ;
-        }
-    }
-    return (path);
+	i = -1;
+	path = NULL;
+	while (env[++i])
+	{
+		if (ft_strnstr(env[i], "PATH=/Users", ft_strlen(env[i])))
+		{
+			path = env[i] + 5;
+			break ;
+		}
+	}
+	return (path);
 }
 
 static void	create_processes(t_var var)
@@ -73,7 +74,7 @@ static void	create_processes(t_var var)
 	int	pfd[2];
 	int	pid1;
 	int	pid2;
-	
+
 	if (pipe(pfd) == -1)
 		ft_error(1, var.in_fd, var.out_fd);
 	pid1 = fork();
@@ -102,7 +103,7 @@ int	main(int ac, char **av, char **env)
 	int		out_fd;
 	char	*path;
 	t_var	var;
-	
+
 	if (ac != 5)
 	{
 		perror("ERROR: Wrong number of arguments !\n");

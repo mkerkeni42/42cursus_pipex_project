@@ -3,22 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   create_first_process.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mkerkeni <mkerkeni@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 15:01:17 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/05/16 11:48:08 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/05/18 09:27:47 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
-
 
 static void	get_input(t_var var, int **pfd, int *tmp_fd)
 {
 	char	*line;
 
 	if (close(pfd[0][0]) == -1)
-			ft_error(2, var.in_fd, var.out_fd);
+		ft_error(2, var.in_fd, var.out_fd);
 	close_pipes(var, pfd, -1);
 	line = get_next_line(0);
 	while (line)

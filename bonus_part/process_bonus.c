@@ -3,37 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   process_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mkerkeni <mkerkeni@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 12:07:22 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/05/16 11:49:24 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/05/18 09:49:29 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-static void	wait_for_processes(t_var var, int first_pid, int last_pid, int *pids, int x)
+static void	wait_for_processes(t_var var, int x)
 {
 	int	i;
 
 	i = 0;
 	if (x == 0)
 	{
-		if (waitpid(first_pid, NULL, 0) == -1)
+		if (waitpid(var.first_pid, NULL, 0) == -1)
 			ft_error(3, var.in_fd, var.out_fd);
 	}
 	if (x == 1)
 	{
 		while (i < (var.pipe_nb - 1))
 		{
-			if (waitpid(pids[i], NULL, 0) == -1)
-			ft_error(3, var.in_fd, var.out_fd);
+			if (waitpid(var.mid_pids[i], NULL, 0) == -1)
+				ft_error(3, var.in_fd, var.out_fd);
 			i++;
 		}
 	}
 	if (x == 2)
 	{
-		if (waitpid(last_pid, NULL, 0) == -1)	
+		if (waitpid(var.last_pid, NULL, 0) == -1)
 			ft_error(3, var.in_fd, var.out_fd);
 	}
 }
@@ -42,7 +42,7 @@ static int	create_last_process(t_var var, int **pfd)
 {
 	int	pid;
 	int	i;
-	
+
 	i = -1;
 	pid = fork();
 	if (pid == -1)
@@ -68,7 +68,7 @@ static int	create_last_process(t_var var, int **pfd)
 static int	*create_mid_processes(t_var var, int **pfd, int *pids)
 {
 	int	i;
-	
+
 	i = -1;
 	while (++i < var.pipe_nb - 1)
 	{
@@ -120,7 +120,7 @@ void	create_processes(t_var var)
 	int	first_pid;
 	int	last_pid;
 	int	*mid_pids;
-	
+
 	mid_pids = malloc(sizeof(int) * (var.pipe_nb - 1));
 	pfd = get_pfd(var);
 	if (!var.in_fd)
@@ -130,11 +130,14 @@ void	create_processes(t_var var)
 	if (var.pipe_nb > 1)
 		mid_pids = create_mid_processes(var, pfd, mid_pids);
 	last_pid = create_last_process(var, pfd);
+	var.first_pid = first_pid;
+	var.mid_pids = mid_pids;
+	var.last_pid = last_pid;
 	close_pipes(var, pfd, -2);
-	wait_for_processes(var, first_pid, last_pid, mid_pids, 0);
+	wait_for_processes(var, 0);
 	if (var.pipe_nb > 1)
-		wait_for_processes(var, first_pid, last_pid, mid_pids, 1);
-	wait_for_processes(var, first_pid, last_pid, mid_pids, 2);
+		wait_for_processes(var, 1);
+	wait_for_processes(var, 2);
 	free_array(pfd, var.pipe_nb);
 	free(mid_pids);
 }

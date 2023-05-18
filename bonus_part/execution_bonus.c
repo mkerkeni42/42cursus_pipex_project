@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkerkeni <mkerkeni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mkerkeni <mkerkeni@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 15:35:55 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/05/15 12:04:55 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/05/18 10:23:59 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	free_str(char **str)
 {
 	int	i;
-	
+
 	i = -1;
 	while (str[++i])
 		free(str[i]);
@@ -24,7 +24,7 @@ void	free_str(char **str)
 
 void	free_array(int **array, int size)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	while (++i < size)
@@ -32,21 +32,22 @@ void	free_array(int **array, int size)
 	free(array);
 }
 
-char    *get_path(char **env)
+char	*get_path(char **env)
 {
-    char    *path;
-    int     i;
+	char	*path;
+	int		i;
 
-    i = -1;
-    while (env[++i])
-    {
-        if (ft_strnstr(env[i], "PATH=/usr", ft_strlen(env[i])))
-        {
-            path = env[i] + 5;
-            break ;
-        }
-    }
-    return (path);
+	i = -1;
+	path = NULL;
+	while (env[++i])
+	{
+		if (ft_strnstr(env[i], "PATH=/Users", ft_strlen(env[i])))
+		{
+			path = env[i] + 5;
+			break ;
+		}
+	}
+	return (path);
 }
 
 static char	*get_cmd_path(t_var var, char **cmds)
@@ -55,7 +56,7 @@ static char	*get_cmd_path(t_var var, char **cmds)
 	char	*cmd_path;
 	char	*test_cmd_path;
 	int		i;
-	
+
 	i = -1;
 	splitted_paths = ft_split(var.path, ':');
 	while (splitted_paths[++i])
@@ -79,17 +80,20 @@ void	exec_cmd(t_var var, int arg)
 {
 	char	**cmds;
 	char	*cmd_path;
-	
+
 	cmds = ft_split(var.av[arg], ' ');
 	if (!cmds)
 		ft_error(6, var.in_fd, var.out_fd);
-	cmd_path = get_cmd_path(var, cmds);
-	if (!cmd_path)
+	if (cmds[0][0] != '/')
 	{
-		free_str(cmds);
-		ft_error(5, var.in_fd, var.out_fd);
+		cmd_path = get_cmd_path(var, cmds);
+		if (!cmd_path)
+		{
+			free_str(cmds);
+			ft_error(5, var.in_fd, var.out_fd);
+		}
+		cmds[0] = cmd_path;
 	}
-	cmds[0] = cmd_path;
 	if (execve(cmds[0], cmds, var.env) == -1)
 		ft_error(7, var.in_fd, var.out_fd);
 }
