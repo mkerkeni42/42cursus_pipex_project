@@ -6,7 +6,7 @@
 /*   By: mkerkeni <mkerkeni@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 12:53:39 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/05/18 09:56:44 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/05/19 09:39:35 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static int	get_fd(char *path, int x)
 	if (x == 0)
 		fd = open(path, O_RDONLY, 0777);
 	else
-		fd = open(path, O_CREAT | O_WRONLY | O_TRUNC, 0777);
+		fd = open(path, O_CREAT | O_WRONLY | O_APPEND, 0777);
 	if (fd == -1)
 	{
 		perror("ERROR: failed to open the file\n");
@@ -74,6 +74,9 @@ static int	get_fd(char *path, int x)
 
 static int	check_args(t_var var, int in_fd)
 {
+	int	i;
+
+	i = 1;
 	if (var.ac < 5)
 	{
 		perror("ERROR: Wrong number of arguments !\n");
@@ -81,6 +84,7 @@ static int	check_args(t_var var, int in_fd)
 	}
 	if (!ft_strncmp(var.av[1], "here_doc", ft_strlen(var.av[1])))
 	{
+		i = 2;
 		if (var.ac < 6)
 		{
 			perror("ERROR: Wrong number of arguments !\n");
@@ -90,6 +94,9 @@ static int	check_args(t_var var, int in_fd)
 	}
 	else
 		in_fd = get_fd(var.av[1], 0);
+	while (++i < var.ac - 1)
+		if (!var.av[i][0] || var.av[i][0] == ' ')
+			ft_error(6, var.in_fd, var.out_fd);
 	return (in_fd);
 }
 

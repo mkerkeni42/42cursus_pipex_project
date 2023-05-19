@@ -6,7 +6,7 @@
 /*   By: mkerkeni <mkerkeni@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 15:35:55 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/05/18 10:23:59 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/05/18 11:34:24 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ static char	*get_cmd_path(t_var var, char **cmds)
 			return (cmd_path);
 		}
 	}
-	free(test_cmd_path);
 	free(cmd_path);
 	free(splitted_paths);
 	return (NULL);

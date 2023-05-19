@@ -6,7 +6,7 @@
 /*   By: mkerkeni <mkerkeni@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 15:01:17 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/05/18 09:27:47 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/05/19 09:47:40 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,25 +15,30 @@
 static void	get_input(t_var var, int **pfd, int *tmp_fd)
 {
 	char	*line;
+	char	*limiter;
 
-	if (close(pfd[0][0]) == -1)
-		ft_error(2, var.in_fd, var.out_fd);
+	limiter = ft_strjoin(var.av[2], "\n");
 	close_pipes(var, pfd, -1);
 	line = get_next_line(0);
 	while (line)
 	{
-		if (!ft_strncmp(line, var.av[2], ft_strlen(var.av[2])))
+		if (!ft_strncmp(line, limiter, ft_strlen(limiter)))
 		{
-			free(line);
-			if (close(tmp_fd[1]) == -1)
-				ft_error(2, var.in_fd, var.out_fd);
-			return ;
+			if (!ft_strncmp(line, limiter, ft_strlen(line)))
+			{
+				free(line);
+				free(limiter);
+				if (close(tmp_fd[1]) == -1)
+					ft_error(2, var.in_fd, var.out_fd);
+				return ;
+			}	
 		}
 		if (write(tmp_fd[1], line, ft_strlen(line)) == -1)
 			ft_error(9, var.in_fd, var.out_fd);
 		free(line);
 		line = get_next_line(0);
 	}
+	free(limiter);
 }
 
 int	create_process_here_doc(t_var var, int **pfd)
@@ -48,6 +53,8 @@ int	create_process_here_doc(t_var var, int **pfd)
 		ft_error(0, var.in_fd, var.out_fd);
 	if (pid == 0)
 	{
+		if (close(pfd[0][0]) == -1)
+			ft_error(2, var.in_fd, var.out_fd);
 		get_input(var, pfd, tmp_fd);
 		dup2(tmp_fd[0], STDIN_FILENO);
 		if (close(tmp_fd[0]) == -1)

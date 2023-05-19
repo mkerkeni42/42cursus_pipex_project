@@ -6,7 +6,7 @@
 /*   By: mkerkeni <mkerkeni@student.42nice.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/03 12:53:39 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/05/18 09:46:24 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/05/18 12:20:56 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,8 @@ int	main(int ac, char **av, char **env)
 	}
 	in_fd = get_fd(av[1], 0);
 	out_fd = get_fd(av[4], 1);
+	if (!av[2][0] || !av[3][0] || av[2][0] == ' ' || av[3][0] == ' ')
+		ft_error(6, in_fd, out_fd);
 	path = get_path(env);
 	if (!path)
 		ft_error(5, in_fd, out_fd);
