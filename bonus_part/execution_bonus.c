@@ -41,7 +41,7 @@ char	*get_path(char **env)
 	path = NULL;
 	while (env[++i])
 	{
-		if (ft_strnstr(env[i], "PATH=/Users", ft_strlen(env[i])))
+		if (ft_strnstr(env[i], "PATH=", ft_strlen(env[i])))
 		{
 			path = env[i] + 5;
 			break ;
